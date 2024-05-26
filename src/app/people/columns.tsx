@@ -8,26 +8,99 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
+    // DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox"
 
 export const columns: ColumnDef<Person>[] = [
+    {
+        id:'select',
+        header:({table})=>{
+             return(
+                <Checkbox 
+                    checked={table.getIsAllPageRowsSelected()}
+                    onCheckedChange={(value)=>{table.toggleAllPageRowsSelected(!!value);
+                    }}
+                />
+            )
+        },
+        cell: ({row})=>{
+            return (
+                <Checkbox 
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value)=>{row.toggleSelected(!!value);
+                    }}  
+                />
+            )
+        }, 
+        enableSorting: false,
+        enableHiding: false,   
+    },
     
     {
-        header: "PersonID",
+        header: ({column}) =>{
+            return(
+                <Button 
+                    variant="ghost" 
+                    onClick={()=>{
+                    column.toggleSorting(column.getIsSorted()==='asc');
+                }}
+                >
+                    Person ID 
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
         accessorKey: "id"
     },
     {
-        header: "First Name",
+        header: ({column}) =>{
+            return(
+                <Button 
+                    variant="ghost" 
+                    onClick={()=>{
+                    column.toggleSorting(column.getIsSorted()==='asc');
+                }}
+                >
+                    First Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
         accessorKey: "first_name"
     },
     {
-        header: "Last Name",
+        header: ({column}) =>{
+            return(
+                <Button 
+                    variant="ghost" 
+                    onClick={()=>{
+                    column.toggleSorting(column.getIsSorted()==='asc');
+                }}
+                >
+                    Last Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
         accessorKey: "last_name"
     },
     {
-        header: "Email",
+        header: ({column}) =>{
+            return(
+                <Button 
+                    variant="ghost" 
+                    onClick={()=>{
+                    column.toggleSorting(column.getIsSorted()==='asc');
+                }}
+                >
+                    Email
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
         accessorKey: "email"
     },
     {
@@ -35,7 +108,19 @@ export const columns: ColumnDef<Person>[] = [
         accessorKey: "gender"
     },
     {
-        header: "Date of birth",
+        header: ({column}) =>{
+            return(
+                <Button 
+                    variant="ghost" 
+                    onClick={()=>{
+                    column.toggleSorting(column.getIsSorted()==='asc');
+                }}
+                >
+                    Date of Birth
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
         accessorKey: "date_of_birth",
         cell: ({ row }) => {
             const date_of_birth = row.getValue("date_of_birth");
@@ -48,8 +133,27 @@ export const columns: ColumnDef<Person>[] = [
         cell: ({row})=>{
            const person = row.original
            const personId = person.id
-           
+           return (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant='ghost' className="w-8 h-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuItem onClick={()=>{
+                        navigator.clipboard.writeText(person.last_name.toString())
+                    }}>
+                        Copy person name
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>View</DropdownMenuItem>
+                    <DropdownMenuItem>Update</DropdownMenuItem>
+                    <DropdownMenuItem>Delete</DropdownMenuItem>
 
+                </DropdownMenuContent>
+            </DropdownMenu>
+           )          
         }
     }
 ]
